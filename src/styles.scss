@@ -5,3 +5,23 @@ html,body{
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.fx-column{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.fx-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.justify-center{
+    justify-content: center;
+}
+.justify-space-between{
+    justify-content: space-between;
+}
+.justify-space-around{
+    justify-content: space-around;
+}

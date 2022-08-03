@@ -1,8 +1,29 @@
 <div class="algorithm-visualiser">
     <mat-toolbar id="algo-header">
-        <span>Sorting Visualiser</span>
-        <mat-slider [min]="minimumCount" [max]="maximumCount" [step]="1" (change)="countChangesEvent($event)"> </mat-slider>
-        <button mat-raised-button color="primary" (click)="startSorting()">Start</button>
+        <mat-toolbar-row class="main-header justify-center">
+            <span>Sorting Visualiser</span>
+        </mat-toolbar-row>
+        <mat-toolbar-row class="justify-space-around">
+            <button mat-raised-button color="primary" [disabled]="!isSorting" (click)="reset()">
+                <mat-icon>restart_alt</mat-icon>
+                Reset
+            </button>
+            <span class="fx-column">
+                <span class="slider-label">Delay</span>
+                <mat-slider [min]="minimumDelay" [max]="maximumDelay" [(ngModel)]="delayCount" [step]="delayCountStep">
+                </mat-slider>
+            </span>
+            <span class="fx-column">
+                <span class="slider-label">Item Count</span>
+                <mat-slider [disabled]="isSorting" [min]="minimumCount" [max]="maximumCount" [(ngModel)]="itemCount"
+                    [step]="1" (change)="countChangesEvent($event)">
+                </mat-slider>
+            </span>
+            <button *ngFor="let sortStyle of sortStyles" mat-raised-button color="primary" [disabled]="isSorting"
+                (click)="startSorting(sortStyle)">
+                {{sortStyle}}
+            </button>
+        </mat-toolbar-row>
     </mat-toolbar>
     <div id="array-elements-container">
     </div>

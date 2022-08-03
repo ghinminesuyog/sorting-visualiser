@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatSliderChange } from '@angular/material';
 
 @Component({
@@ -9,23 +9,40 @@ import { MatSliderChange } from '@angular/material';
 })
 export class MergeSortComponent implements OnInit {
 
-  minimumCount = 0;
-  maximumCount = 0;
+  minimumCount = 4;
+  maximumCount = 4;
+  itemCount = 0;
+
+  minimumDelay = 100;
+  maximumDelay = 1000;
+  delayCountStep = 100;
+  delayCount = 100;
+
   arrayOfNumbers: number[] = [];
 
   unsortedColor = 'red';
   sortingColour = 'blue';
   sortedColour = 'green';
 
+  sortStyles = [
+    'Bubble Sort'
+  ];
+
+  isSorting = false;
+
   constructor() { }
 
   ngOnInit() {
-    const arrayContainerWidth = document.getElementById('array-elements-container').clientWidth;
-    const count = arrayContainerWidth / 10;
-    this.minimumCount = 4;
-    this.maximumCount = count;
+    this.getMaximumCountForArrayItems();
+    this.createArrayElements(this.minimumCount);
   }
 
+  getMaximumCountForArrayItems() {
+    const arrayContainerWidth = document.getElementById('array-elements-container').clientWidth;
+    const count = arrayContainerWidth / 10;
+    this.maximumCount = count;
+  }
+  
   removeArrayElements() {
     const arrayContainer = document.getElementById('array-elements-container');
     arrayContainer.innerHTML = '';
@@ -58,64 +75,57 @@ export class MergeSortComponent implements OnInit {
   }
 
   getRandomNumber(min: number, max: number) {
-    return Math.random() * (max - min) + min;
+    return Math.round(Math.random() * (max - min) + min);
   }
 
-  bubbleSort(array, startIndex, iterationCounter) {
-    setTimeout(() => {
-      if (startIndex < array.length - 1 && iterationCounter > 0) {
-        const previousElement = document.getElementById(`${startIndex - 1}th-element`);
-        const currentElement = document.getElementById(`${startIndex}th-element`);
-        const nextElement = document.getElementById(`${startIndex + 1}th-element`);
-
-        if (previousElement) {
-          previousElement.style.backgroundColor = this.unsortedColor;
-        }
-        if (startIndex === 0) {
-          const lastElement = document.getElementById(`${array.length - 1}th-element`);
-          lastElement.style.backgroundColor = this.unsortedColor;
-
-          const secondLastElement = document.getElementById(`${array.length - 2}th-element`);
-          secondLastElement.style.backgroundColor = this.unsortedColor;
-        }
-
+  async bubbleSort(array) {
+    for (let j = 0; j < array.length; j++) {
+      for (let i = 0; i < array.length - 1 - j; i++) {
+        const currentElement = document.getElementById(`${i}th-element`);
+        const nextElement = document.getElementById(`${i + 1}th-element`);
         currentElement.style.backgroundColor = this.sortingColour;
         nextElement.style.backgroundColor = this.sortingColour;
+        if (array[i] > array[i + 1]) {
+          const temp = array[i];
+          array[i] = array[i + 1];
+          array[i + 1] = temp;
 
-        if (array[startIndex] > array[startIndex + 1]) {
-          const temp = array[startIndex];
-          array[startIndex] = array[startIndex + 1];
-          array[startIndex + 1] = temp;
+          currentElement.style.height = `${array[i]}px`;
+          nextElement.style.height = `${array[i + 1]}px`;
         }
-        currentElement.style.height = `${array[startIndex]}px`;
-        nextElement.style.height = `${array[startIndex + 1]}px`;
-
-        startIndex += 1;
-        if (startIndex == array.length - 1) {
-          const lastElement = document.getElementById(`${array.length - 1}th-element`);
-          lastElement.style.backgroundColor = this.sortedColour;
-        }
-        this.bubbleSort(array, startIndex, iterationCounter);
-      } else if (startIndex === array.length - 1) {
-        iterationCounter -= 1;
-        startIndex = 0;
-        array.splice(array.length - 1, 1)
-        this.bubbleSort(array, startIndex, iterationCounter)
-      } else if (iterationCounter === 0) {
-        const firstElement = document.getElementById(`0th-element`);
-        firstElement.style.backgroundColor = this.sortedColour;
+        await this.delay();
+        currentElement.style.backgroundColor = this.unsortedColor;
+        nextElement.style.backgroundColor = this.unsortedColor;
       }
-    }, 1000);
+      const lastElement = document.getElementById(`${array.length - 1 - j}th-element`);
+      lastElement.style.backgroundColor = this.sortedColour;
+    }
+    this.isSorting = false;
+  }
 
+  delay() {
+    return new Promise(resolve => {
+      setTimeout(() => { resolve('') }, this.delayCount);
+    })
   }
 
   startSorting() {
-    this.bubbleSort(this.arrayOfNumbers, 0, this.arrayOfNumbers.length);
+    this.isSorting = true;
+    this.bubbleSort(this.arrayOfNumbers);
   }
 
   countChangesEvent(change: MatSliderChange) {
     this.removeArrayElements();
     this.createArrayElements(change.value);
+  }
+
+  reset() {
+    this.isSorting = false;
+    this.itemCount = this.minimumCount;
+    this.delayCount = this.minimumDelay;
+    this.getMaximumCountForArrayItems();
+    this.removeArrayElements();
+    this.createArrayElements(this.minimumCount);
   }
 
 }

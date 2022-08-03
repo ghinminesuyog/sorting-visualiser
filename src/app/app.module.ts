@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { MergeSortComponent } from './merge-sort/merge-sort.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatIconModule, MatInputModule, MatSliderModule, MatToolbarModule } from '@angular/material';
+import { MatButtonModule, MatButtonToggleModule, MatIconModule, MatInputModule, MatSliderModule, MatToolbarModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -20,6 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatButtonModule,
     MatSliderModule,
     MatInputModule,
+    MatButtonToggleModule,
     ReactiveFormsModule,
     FormsModule
   ],
