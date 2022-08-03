@@ -13,10 +13,10 @@ export class MergeSortComponent implements OnInit {
   maximumCount = 4;
   itemCount = 0;
 
-  minimumDelay = 100;
+  minimumDelay = 10;
   maximumDelay = 1000;
   delayCountStep = 100;
-  delayCount = 100;
+  delayCount = 10;
 
   arrayOfNumbers: number[] = [];
 
@@ -25,7 +25,8 @@ export class MergeSortComponent implements OnInit {
   sortedColour = 'green';
 
   sortStyles = [
-    'Bubble Sort'
+    'Bubble Sort',
+    'Selection Sort'
   ];
 
   isSorting = false;
@@ -42,7 +43,7 @@ export class MergeSortComponent implements OnInit {
     const count = arrayContainerWidth / 10;
     this.maximumCount = count;
   }
-  
+
   removeArrayElements() {
     const arrayContainer = document.getElementById('array-elements-container');
     arrayContainer.innerHTML = '';
@@ -79,28 +80,61 @@ export class MergeSortComponent implements OnInit {
   }
 
   async bubbleSort(array) {
-    for (let j = 0; j < array.length; j++) {
-      for (let i = 0; i < array.length - 1 - j; i++) {
-        const currentElement = document.getElementById(`${i}th-element`);
-        const nextElement = document.getElementById(`${i + 1}th-element`);
-        currentElement.style.backgroundColor = this.sortingColour;
-        nextElement.style.backgroundColor = this.sortingColour;
-        if (array[i] > array[i + 1]) {
-          const temp = array[i];
-          array[i] = array[i + 1];
-          array[i + 1] = temp;
+    try {
+      for (let j = 0; j < array.length; j++) {
+        for (let i = 0; i < array.length - 1 - j; i++) {
+          const currentElement = document.getElementById(`${i}th-element`);
+          const nextElement = document.getElementById(`${i + 1}th-element`);
+          currentElement.style.backgroundColor = this.sortingColour;
+          nextElement.style.backgroundColor = this.sortingColour;
+          if (array[i] > array[i + 1]) {
+            const temp = array[i];
+            array[i] = array[i + 1];
+            array[i + 1] = temp;
 
-          currentElement.style.height = `${array[i]}px`;
-          nextElement.style.height = `${array[i + 1]}px`;
+            currentElement.style.height = `${array[i]}px`;
+            nextElement.style.height = `${array[i + 1]}px`;
+          }
+          await this.delay();
+          currentElement.style.backgroundColor = this.unsortedColor;
+          nextElement.style.backgroundColor = this.unsortedColor;
         }
-        await this.delay();
-        currentElement.style.backgroundColor = this.unsortedColor;
-        nextElement.style.backgroundColor = this.unsortedColor;
+        const lastElement = document.getElementById(`${array.length - 1 - j}th-element`);
+        lastElement.style.backgroundColor = this.sortedColour;
       }
-      const lastElement = document.getElementById(`${array.length - 1 - j}th-element`);
-      lastElement.style.backgroundColor = this.sortedColour;
+      this.isSorting = false;
+    } catch (error) {
+      this.isSorting = false;
     }
-    this.isSorting = false;
+  }
+
+  async selectionSort(array) {
+    try {
+      for (let j = 0; j < array.length; j++) {
+        for (let i = j; i < array.length; i++) {
+          const element1 = document.getElementById(`${i}th-element`);
+          const element2 = document.getElementById(`${j}th-element`);
+          element1.style.backgroundColor = this.sortingColour;
+          element2.style.backgroundColor = this.sortingColour;
+          if (array[j] > array[i]) {
+            const temp = array[j];
+            array[j] = array[i];
+            array[i] = temp;
+
+            element1.style.height = `${array[i]}px`;
+            element2.style.height = `${array[j]}px`;
+          }
+          await this.delay();
+          element1.style.backgroundColor = this.unsortedColor;
+          element2.style.backgroundColor = this.unsortedColor;
+        }
+        const firstElement = document.getElementById(`${j}th-element`);
+        firstElement.style.backgroundColor = this.sortedColour;
+      }
+      this.isSorting = false;
+    } catch (error) {
+      this.isSorting = false;
+    }
   }
 
   delay() {
@@ -109,9 +143,18 @@ export class MergeSortComponent implements OnInit {
     })
   }
 
-  startSorting() {
+  startSorting(sortStyle: string) {
     this.isSorting = true;
-    this.bubbleSort(this.arrayOfNumbers);
+    switch (sortStyle) {
+      case 'Bubble Sort':
+        this.bubbleSort(this.arrayOfNumbers);
+        break;
+      case 'Selection Sort':
+        this.selectionSort(this.arrayOfNumbers);
+        break;
+      default:
+        break;
+    }
   }
 
   countChangesEvent(change: MatSliderChange) {
