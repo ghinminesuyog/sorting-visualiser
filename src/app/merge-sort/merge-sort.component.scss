@@ -1,8 +1,12 @@
 .algorithm-visualiser {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     width: 100%;
     height: 100%;
+    #algo-header{
+        justify-content: space-between;
+    }
 }
 #array-elements-container {
     display: flex;
@@ -10,6 +14,8 @@
     width: 100%;
     justify-content: space-between;
     align-items: flex-end;
+    padding: 10px;
+    box-sizing: border-box;
     .array-element {
         width: 4px;
         // height: 10px;

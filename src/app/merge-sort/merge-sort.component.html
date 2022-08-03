@@ -1,5 +1,9 @@
 <div class="algorithm-visualiser">
-    <button (click)="startSorting()">Start</button>
+    <mat-toolbar id="algo-header">
+        <span>Sorting Visualiser</span>
+        <mat-slider [min]="minimumCount" [max]="maximumCount" [step]="1" (change)="countChangesEvent($event)"> </mat-slider>
+        <button mat-raised-button color="primary" (click)="startSorting()">Start</button>
+    </mat-toolbar>
     <div id="array-elements-container">
     </div>
 </div>
