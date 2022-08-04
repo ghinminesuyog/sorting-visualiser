@@ -1,3 +1,3 @@
 # SortingVisualiser
 
-This project is hosted [here]https://ghinminesuyog.github.io/sorting-visualiser/
+This project is hosted https://ghinminesuyog.github.io/sorting-visualiser/
